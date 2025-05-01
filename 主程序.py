@@ -1,6 +1,5 @@
 import pygame as py
 from random import randint
-from time import sleep
 
 
 py.init()
@@ -258,30 +257,46 @@ class Enemy_aircraft3(py.sprite.Sprite):
 a3 = Enemy_aircraft3()
 
 
-# 子弹精灵图播放
-class Bullet_sprite_diagram:
-    def __init__(self, x, y):
+# 子弹类
+class Bullent(py.sprite.Sprite):
+    def __init__(self):
+        # 确保成功调用
+        super().__init__()
+        # 子弹图片
         self.image = py.image.load(
             r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/bullet1.png"
         )
-        self.x = x + 25
-        self.y = y
-        self.speed = 8
+        # 子弹图片矩形位置
+        self.image_rect = self.image.get_rect()
+        # 子弹图片矩形位置/x(根据英雄飞机的位置而定)
+        self.image_rect_x = a0.image_rect.x
+        # 子弹图片矩形位置/x(根据英雄飞机的位置而定)
+        self.image_rect_y = a0.image_rect.y
+        # 子弹速度
+        self.speed = 2
 
-    # 向上移动
-    def move(self):
-        self.y -= self.speed
+    def update(self):
+        self.image_rect_y -= self.speed
+        if self.image_rect_y == 100:
+            # 只会删除当前实例对象
+            bullet_sprites.remove(self)
 
-    # 渲染
     def draw(self):
-        suface.blit(self.image, (self.x, self.y))
+        # 获取子弹更新的矩形位置
+        self.bullet_rect = self.image.get_rect()
+        # 渲染
+        suface.blit(self.image, (self.image_rect_x, self.image_rect_y))
+        # 只更新子弹位置
+        py.display.update(self.bullet_rect)
 
-    # 超出屏幕检测
-    def off_screen(self):
-        return self.y < 10
+
+# 创建实例对象
+a4 = Bullent()
 
 
-# 精灵组组，用于统一管理飞机对象
+# 子弹精灵组,用于管理子弹发射
+bullet_sprites = py.sprite.Group()
+# 敌机精灵组，用于统一管理飞机对象
 elf_group = py.sprite.Group()
 
 
@@ -341,6 +356,14 @@ while True:
             elf_group.draw(suface)
             # 飞机操作方法
             a0.move()
+            # 判断操作
+            if keys[py.K_g]:
+                # 添加精灵组
+                bullet_sprites.add(a4)
+
+            # 渲染子弹
+            bullet_sprites.update()
+            bullet_sprites.draw(suface)
 
         else:
             # 飞机出场方法
