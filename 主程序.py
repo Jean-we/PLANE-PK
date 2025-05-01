@@ -60,51 +60,52 @@ class Hero_planes:
         # 出场动画计数器
         self.counter = counter
         # 英雄飞机图片
-        self.image = py.image.load(
+        self.old_image = py.image.load(
             r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/me1.png"
         )
+        self.new_image = py.transform.scale(self.old_image, (51, 63))
         # 英雄飞机图片矩形位置
-        self.image_rect = self.image.get_rect()
+        self.image_rect = self.new_image.get_rect()
         # 出场坐标x/y
         self.location_x = x
         self.location_y = y
 
     # 飞机出场动画
     def appearance_animation(self):
-        suface.blit(self.image, (self.location_x, self.location_y))
+        suface.blit(self.new_image, (self.location_x, self.location_y))
         if self.location_y == 544:
-            suface.blit(self.image, (self.location_x, self.location_y))
+            suface.blit(self.new_image, (self.location_x, self.location_y))
             self.counter += 1
             return self.counter
 
         else:
             self.location_y -= 3
-            suface.blit(self.image, (self.location_x, self.location_y))
+            suface.blit(self.new_image, (self.location_x, self.location_y))
 
     # 操作飞机移动
     def move(self):
         # 更新英雄飞机图片坐标
         self.image_rect.topleft = (self.location_x, self.location_y)
         # 绘制英雄飞机
-        suface.blit(self.image, (self.location_x, self.location_y))
+        suface.blit(self.new_image, (self.location_x, self.location_y))
         # 判断英雄飞机是否在画面内
         if suface.get_rect().contains(self.image_rect):
             # 英雄飞机的移动
             if keys[py.K_w]:
                 self.location_y -= 7
-                suface.blit(self.image, (self.location_x, self.location_y))
+                suface.blit(self.new_image, (self.location_x, self.location_y))
 
             elif keys[py.K_s]:
                 self.location_y += 7
-                suface.blit(self.image, (self.location_x, self.location_y))
+                suface.blit(self.new_image, (self.location_x, self.location_y))
 
             elif keys[py.K_a]:
                 self.location_x -= 7
-                suface.blit(self.image, (self.location_x, self.location_y))
+                suface.blit(self.new_image, (self.location_x, self.location_y))
 
             elif keys[py.K_d]:
                 self.location_x += 7
-                suface.blit(self.image, (self.location_x, self.location_y))
+                suface.blit(self.new_image, (self.location_x, self.location_y))
 
         else:
             # 边界处理
@@ -135,17 +136,29 @@ class Enemy_aircraft1(py.sprite.Sprite):
         )
         # 飞机矩形位置
         self.rect = self.image.get_rect()
+        # 初始值计数器
+        self.enumeration = 0
+
+    # 随机位置/速度
+    def random(self):
         # 随机位置x/y
-        self.rect.x = randint(0, 400)
+        self.rect.x = randint(0, 350)
         self.rect.y = randint(-15, 3)
         # 移动速度
         self.speed = randint(1, 3)
 
     # 更新
     def update(self):
-        self.rect.y += self.speed
-        if self.rect.y > 600:
-            self.kill()
+        if self.enumeration == 0:
+            a1.random()
+            self.enumeration += 1
+        else:
+            # 更新操作
+            self.rect.y += self.speed
+            if self.rect.y > 650:
+                # 销毁
+                elf_group.remove(self)
+                self.enumeration = 0
 
     # 渲染
     def draw(self):
@@ -167,17 +180,29 @@ class Enemy_aircraft2(py.sprite.Sprite):
         )
         # 飞机矩形位置
         self.rect = self.image.get_rect()
+        # 初始值计数器
+        self.enumeration = 0
+
+    # 随机位置/速度
+    def random(self):
         # 随机位置x/y
-        self.rect.x = randint(0, 400)
+        self.rect.x = randint(0, 350)
         self.rect.y = randint(-15, 3)
         # 移动速度
         self.speed = randint(1, 3)
 
     # 更新
     def update(self):
-        self.rect.y += self.speed
-        if self.rect.y > 600:
-            self.kill()
+        if self.enumeration == 0:
+            a2.random()
+            self.enumeration += 1
+        else:
+            # 更新操作
+            self.rect.y += self.speed
+            if self.rect.y > 650:
+                # 销毁
+                elf_group.remove(self)
+                self.enumeration = 0
 
     # 渲染
     def draw(self):
@@ -199,18 +224,29 @@ class Enemy_aircraft3(py.sprite.Sprite):
         )
         # 飞机矩形位置
         self.rect = self.image.get_rect()
+        # 初始值计数器
+        self.enumeration = 0
+
+    # 随机位置/速度
+    def random(self):
         # 随机位置x/y
-        self.rect.x = randint(0, 400)
+        self.rect.x = randint(0, 350)
         self.rect.y = randint(-15, 3)
         # 移动速度
-        self.speed = randint(1, 3)
+        self.speed = randint(1, 4)
 
     # 更新
     def update(self):
-        self.rect.y += self.speed
-        if self.rect.y > 650:
-            # 销毁
-            self.kill()
+        if self.enumeration == 0:
+            a3.random()
+            self.enumeration += 1
+        else:
+            # 更新操作
+            self.rect.y += self.speed
+            if self.rect.y > 650:
+                # 销毁
+                elf_group.remove(self)
+                self.enumeration = 0
 
     # 渲染
     def draw(self):
@@ -249,15 +285,18 @@ class Bullet_sprite_diagram:
 elf_group = py.sprite.Group()
 
 
-# 每隔3秒发出事件
-SPAWN_ENEMY = py.USEREVENT
-py.time.set_timer(SPAWN_ENEMY, 3000)
-
-
 # 渲染变量
 a = False
 # 游戏主循环
 while True:
+    if len(list(elf_group)) == 0:
+        # 创建事件类型
+        SPAWN_ENEMY = py.USEREVENT
+        # 创建事件对象
+        incident = py.event.Event(SPAWN_ENEMY)
+        # 发出事件
+        py.event.post(incident)
+
     # 事件检测
     keys = py.key.get_pressed()
 
@@ -291,12 +330,10 @@ while True:
         if a0.counter == 1:
             # 接受事件，并作出操作
             if event.type == SPAWN_ENEMY:
-                # 调用精灵组,并且随机调用
-                for i in range(randint(1, 4)):
-                    # 对象添加进精灵组
-                    elf_group.add(a1)
-                    elf_group.add(a2)
-                    elf_group.add(a3)
+                # 对象添加进精灵组
+                elf_group.add(a1)
+                elf_group.add(a2)
+                elf_group.add(a3)
 
             # 调用更新
             elf_group.update()
