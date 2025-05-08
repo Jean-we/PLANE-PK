@@ -15,31 +15,22 @@ score = 0
 score_text = font.render("fraction: {0}".format(score), False, (255, 255, 255), None)
 
 # 背景板
-suface = py.display.set_mode((480, 700))
+suface = py.display.set_mode((800,484))
+
 # 标题
 py.display.set_caption("飞机大战")
 # 游戏背景图片
 img_game_background = py.image.load(
-    r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/background.png"
+    r"/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/images/background.png"
 )
 # 开始界面图片
 Start_the_interface_img = py.image.load(
-    r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/Start_the_interface.png"
+    r"/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/images/Start_the_interface.png"
 )
 
-# 英雄飞机suface对象
-old_hero_plane = py.image.load(
-    r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/me1.png"
-)
-new_hero_plane = py.transform.scale(old_hero_plane, (51, 63))
+#窗口矩形位置信息
+suface_rect = suface.get_rect()
 
-# 敌机1suface对象
-enemy1 = py.image.load(
-    r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/enemy1.png"
-)
-# 初始坐标
-enemy1_x = randint(0, 345)
-enemy1_y = randint(-15, 4)
 # FPS
 clock = py.time.Clock()
 
@@ -60,7 +51,7 @@ class Hero_planes:
         self.counter = counter
         # 英雄飞机图片
         self.old_image = py.image.load(
-            r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/me1.png"
+            r"/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/images/me1.png"
         )
         self.new_image = py.transform.scale(self.old_image, (51, 63))
         # 英雄飞机图片矩形位置
@@ -72,13 +63,13 @@ class Hero_planes:
     # 飞机出场动画
     def appearance_animation(self):
         suface.blit(self.new_image, (self.location_x, self.location_y))
-        if self.location_y == 544:
+        if self.location_y == 420:
             suface.blit(self.new_image, (self.location_x, self.location_y))
             self.counter += 1
             return self.counter
 
         else:
-            self.location_y -= 3
+            self.location_y -= 2
             suface.blit(self.new_image, (self.location_x, self.location_y))
 
     # 操作飞机移动
@@ -110,38 +101,41 @@ class Hero_planes:
             # 边界处理
             if self.location_x < 0:
                 self.location_x = 0
-            elif self.location_x > 360:
-                self.location_x = 360
+            elif self.location_x > 730:
+                self.location_x = 728
             elif self.location_y < 0:
                 self.location_y = 0
-            elif self.location_y > 550:
-                self.location_y = 558
+            elif self.location_y > 420:
+                self.location_y = 418
         py.display.flip()
-
-
 # 英雄飞机出场计数器
 counter = 0
 # 英雄飞机初始坐标
-a0 = Hero_planes(185, 700, counter=counter)
+a0 = Hero_planes(400, 480, counter=counter)
 
 
 # 敌方飞机1/子类
 class Enemy_aircraft1(py.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        # 飞机对象/suface
-        self.image = py.image.load(
-            r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/enemy1.png"
+        # 飞机对象/suface/老
+        self.old_image = py.image.load(
+            r"/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/images/enemy1.png"
         )
+        # 飞机对象/suface/新
+        self.new_image = py.transform.scale(self.old_image, (51, 63))
+
+        # image属性，变量不可变
+        self.image = self.new_image
         # 飞机矩形位置
-        self.rect = self.image.get_rect()
+        self.rect = self.new_image.get_rect()
         # 初始值计数器
         self.enumeration = 0
 
     # 随机位置/速度
     def random(self):
         # 随机位置x/y
-        self.rect.x = randint(0, 350)
+        self.rect.x = randint(0, 770)
         self.rect.y = randint(-15, 3)
         # 移动速度
         self.speed = randint(1, 3)
@@ -164,8 +158,6 @@ class Enemy_aircraft1(py.sprite.Sprite):
         self.new_rect = self.image.get_rect()
         suface.blit(self.image, (self.rect.x, self.rect.y))
         py.display.update(self.new_rect)
-
-
 a1 = Enemy_aircraft1()
 
 
@@ -173,19 +165,23 @@ a1 = Enemy_aircraft1()
 class Enemy_aircraft2(py.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        # 飞机对象/suface
-        self.image = py.image.load(
-            r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/enemy1.png"
+        # 飞机对象/suface/老
+        self.old_image = py.image.load(
+            r"/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/images/enemy2.png"
         )
+        # 飞机对象/suface/新
+        self.new_image = py.transform.scale(self.old_image, (69, 99))
+        # image属性，变量不可变
+        self.image = self.new_image
         # 飞机矩形位置
-        self.rect = self.image.get_rect()
+        self.rect = self.new_image.get_rect()
         # 初始值计数器
         self.enumeration = 0
 
     # 随机位置/速度
     def random(self):
         # 随机位置x/y
-        self.rect.x = randint(0, 350)
+        self.rect.x = randint(0, 770)
         self.rect.y = randint(-15, 3)
         # 移动速度
         self.speed = randint(1, 3)
@@ -208,8 +204,6 @@ class Enemy_aircraft2(py.sprite.Sprite):
         self.new_rect = self.image.get_rect()
         suface.blit(self.image, (self.rect.x, self.rect.y))
         py.display.update(self.new_rect)
-
-
 a2 = Enemy_aircraft2()
 
 
@@ -217,19 +211,23 @@ a2 = Enemy_aircraft2()
 class Enemy_aircraft3(py.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        # 飞机对象/suface
-        self.image = py.image.load(
-            r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/enemy1.png"
+        # 飞机对象/suface/老
+        self.old_image = py.image.load(
+            r"/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/images/enemy3.png"
         )
+        # 飞机对象/suface/新
+        self.new_image = py.transform.scale(self.old_image, (84, 149))
+        # image属性，变量不可变
+        self.image = self.new_image
         # 飞机矩形位置
-        self.rect = self.image.get_rect()
+        self.rect = self.new_image.get_rect()
         # 初始值计数器
         self.enumeration = 0
 
     # 随机位置/速度
     def random(self):
         # 随机位置x/y
-        self.rect.x = randint(0, 350)
+        self.rect.x = randint(0, 770)
         self.rect.y = randint(-15, 3)
         # 移动速度
         self.speed = randint(1, 4)
@@ -252,8 +250,6 @@ class Enemy_aircraft3(py.sprite.Sprite):
         self.new_rect = self.image.get_rect()
         suface.blit(self.image, (self.rect.x, self.rect.y))
         py.display.update(self.new_rect)
-
-
 a3 = Enemy_aircraft3()
 
 
@@ -264,34 +260,27 @@ class Bullent(py.sprite.Sprite):
         super().__init__()
         # 子弹图片
         self.image = py.image.load(
-            r"/Users/jeans/Desktop/python项目实战/自制小程序/飞机大战/素材/images/bullet1.png"
+            r"/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/images/bullet1.png"
         )
-        # 子弹图片矩形位置
-        self.image_rect = self.image.get_rect()
-        # 子弹图片矩形位置/x(根据英雄飞机的位置而定)
-        self.image_rect_x = a0.image_rect.x
-        # 子弹图片矩形位置/x(根据英雄飞机的位置而定)
-        self.image_rect_y = a0.image_rect.y
+        # 初始化子弹矩形位置,也是英雄飞机位置
+        self.rect = a0.new_image.get_rect()
+        self.rect.x = a0.location_x + a0.new_image.get_width() // 2 - self.rect.width // 2
+        self.rect.y = a0.location_y - self.rect.height
         # 子弹速度
         self.speed = 2
-
+    #更新
     def update(self):
-        self.image_rect_y -= self.speed
-        if self.image_rect_y == 100:
-            # 只会删除当前实例对象
-            bullet_sprites.remove(self)
+        self.rect.y -= self.speed
+        if self.rect.bottom < 0:
+            self.kill()
 
+    # 渲染
     def draw(self):
-        # 获取子弹更新的矩形位置
-        self.bullet_rect = self.image.get_rect()
-        # 渲染
-        suface.blit(self.image, (self.image_rect_x, self.image_rect_y))
-        # 只更新子弹位置
-        py.display.update(self.bullet_rect)
+        suface.blit(self.image,(self.rect.x,self.rect.y))
 
 
-# 创建实例对象
-a4 = Bullent()
+
+
 
 
 # 子弹精灵组,用于管理子弹发射
@@ -324,7 +313,8 @@ while True:
     suface.blit(Start_the_interface_img, (0, 0))
     # 开始游戏区域
     # 开始游戏按钮区域
-    region = py.Rect((90.7, 604.4, 300, 33.8))
+    region = py.Rect((285,124,580-285,176-124))
+
     # 获取鼠标位置，返回元祖
     mouse_x, mouse_y = py.mouse.get_pos()
     # 判断鼠标是否在区域内
@@ -357,7 +347,9 @@ while True:
             # 飞机操作方法
             a0.move()
             # 判断操作
-            if keys[py.K_g]:
+            if keys[py.K_SPACE]:
+                # 创建实例对象
+                a4 = Bullent()
                 # 添加精灵组
                 bullet_sprites.add(a4)
 
