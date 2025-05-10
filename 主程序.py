@@ -1,6 +1,7 @@
+from time import sleep
+
 import pygame as py
 from random import randint
-
 
 py.init()
 py.font.init()
@@ -10,10 +11,7 @@ py.font.init()
 font = py.font.SysFont("击杀敌机", 30)
 font_type = py.font.Font(None, 30)
 
-# 初始化得分情况
 score = 0
-score_text = font.render("fraction: {0}".format(score), False, (255, 255, 255), None)
-
 # 背景板
 suface = py.display.set_mode((800,484))
 
@@ -148,7 +146,7 @@ class Enemy_aircraft1(py.sprite.Sprite):
         else:
             # 更新操作
             self.rect.y += self.speed
-            if self.rect.y > 650:
+            if self.rect.y > 490:
                 # 销毁
                 elf_group.remove(self)
                 self.enumeration = 0
@@ -194,7 +192,7 @@ class Enemy_aircraft2(py.sprite.Sprite):
         else:
             # 更新操作
             self.rect.y += self.speed
-            if self.rect.y > 650:
+            if self.rect.y > 490:
                 # 销毁
                 elf_group.remove(self)
                 self.enumeration = 0
@@ -216,7 +214,7 @@ class Enemy_aircraft3(py.sprite.Sprite):
             r"/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/images/enemy3.png"
         )
         # 飞机对象/suface/新
-        self.new_image = py.transform.scale(self.old_image, (84, 149))
+        self.new_image = py.transform.scale(self.old_image, (64,109))
         # image属性，变量不可变
         self.image = self.new_image
         # 飞机矩形位置
@@ -240,7 +238,7 @@ class Enemy_aircraft3(py.sprite.Sprite):
         else:
             # 更新操作
             self.rect.y += self.speed
-            if self.rect.y > 650:
+            if self.rect.y > 490:
                 # 销毁
                 elf_group.remove(self)
                 self.enumeration = 0
@@ -283,16 +281,25 @@ class Bullent(py.sprite.Sprite):
 
 
 
+
+
+
+
+
 # 子弹精灵组,用于管理子弹发射
 bullet_sprites = py.sprite.Group()
 # 敌机精灵组，用于统一管理飞机对象
 elf_group = py.sprite.Group()
 
 
+
 # 渲染变量
 a = False
 # 游戏主循环
 while True:
+    # 初始化得分情况
+    score_text = font.render("fraction: {0}".format(score), False, (255, 255, 255), None)
+
     if len(list(elf_group)) == 0:
         # 创建事件类型
         SPAWN_ENEMY = py.USEREVENT
@@ -340,6 +347,7 @@ while True:
                 elf_group.add(a2)
                 elf_group.add(a3)
 
+
             # 调用更新
             elf_group.update()
             # 调用渲染
@@ -352,6 +360,12 @@ while True:
                 a4 = Bullent()
                 # 添加精灵组
                 bullet_sprites.add(a4)
+            # 检测子弹和敌机的碰撞
+            hi = collisions = py.sprite.groupcollide(elf_group, bullet_sprites, True, False)
+            if bool(hi) == True:
+                score += 1
+
+
 
             # 渲染子弹
             bullet_sprites.update()
