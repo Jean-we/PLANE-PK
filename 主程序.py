@@ -356,6 +356,10 @@ while True:
             a0.move()
             # 判断操作
             if keys[py.K_SPACE]:
+                # 音频导入
+                py.mixer.music.load('/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/sound/鸡.mp3')
+                # 音频播放
+                py.mixer.music.play()
                 # 创建实例对象
                 a4 = Bullent()
                 # 添加精灵组
@@ -374,7 +378,12 @@ while True:
         else:
             # 飞机出场方法
             a0.appearance_animation()
-
+    if score == 200:
+        # 音频导入
+        py.mixer.music.load('/Users/jean/Desktop/python项目实战/自制小程序/飞机大战/素材/sound/鸡你太美.mp3')
+        # 音频播放
+        py.mixer.music.play()
+        score = 0
     # 时钟，控制渲染图片上限
     clock.tick(45)
     py.display.flip()
